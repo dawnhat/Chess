@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,10 +31,11 @@ public final class MoveReader
 	private static StringPattern capturePattern = new StringPattern(CAPTURE_STRING, CommandType.CAPTURE);
 	private static StringPattern castlePattern = new StringPattern(CASTLE_STRING, CommandType.CASTLING);
 	
+	HashMap<CommandType, StringPattern> stringPatterns2 = new HashMap<CommandType, StringPattern>();
 	static StringPattern[] stringPatterns = {placementPattern, movementPattern, capturePattern, castlePattern};
 	
-	private Hashtable<String, String> pieceTable = new Hashtable();
-	private Hashtable<String, String> colorTable = new Hashtable();
+	private HashMap<String, String> pieceTable = new HashMap<String, String>();
+	private HashMap<String, String> colorTable = new HashMap<String, String>();
 	
 	public MoveReader()
 	{
@@ -76,6 +78,7 @@ public final class MoveReader
 		
 	}
 	
+	//<CommandType, StringPattern>
 	private static CommandType returnCommandType(String commandString)
 	{
 		CommandType type = CommandType.INVALID;
@@ -92,8 +95,9 @@ public final class MoveReader
 	public void interpretCommand(String commandString)
 	{
 		Matcher m = null;
+		/*
 		String symbol1 = null;
-		String symbol2 = null;
+		String symbol2 = null;*/
 		for(StringPattern sp : stringPatterns)
 		{
 			if(sp.getCommandType() == returnCommandType(commandString))
@@ -113,12 +117,12 @@ public final class MoveReader
 			System.out.println(color + " " + pieceName + " placed on " + squareName);
 			break;
 		case MOVEMENT:
-			String moveSquare1 = m.group("column1") + m.group("row2");
+			String moveSquare1 = m.group("column1") + m.group("row1");
 			String moveSquare2 = m.group("column2") + m.group("row2");
 			System.out.println("Moved piece from " + moveSquare1 + " to " + moveSquare2);
 			break;
 		case CAPTURE:
-			String captureSquare1 = m.group("column1") + m.group("row2");
+			String captureSquare1 = m.group("column1") + m.group("row1");
 			String captureSquare2 = m.group("column2") + m.group("row2");
 			System.out.println("Moved piece from " + captureSquare1 + " to capture piece on " + captureSquare2);
 			break;
