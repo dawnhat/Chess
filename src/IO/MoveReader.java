@@ -11,6 +11,8 @@ import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import model.Board;
+import model.Game;
 import model.King;
 import model.Piece;
 
@@ -31,13 +33,14 @@ public final class MoveReader
 	private static StringPattern capturePattern = new StringPattern(CAPTURE_STRING, CommandType.CAPTURE);
 	private static StringPattern castlePattern = new StringPattern(CASTLE_STRING, CommandType.CASTLING);
 	
-	HashMap<CommandType, StringPattern> stringPatterns2 = new HashMap<CommandType, StringPattern>();
 	static StringPattern[] stringPatterns = {placementPattern, movementPattern, capturePattern, castlePattern};
 	
-	private HashMap<String, String> pieceTable = new HashMap<String, String>();
-	private HashMap<String, String> colorTable = new HashMap<String, String>();
+	private HashMap<String, String> pieceTable = new HashMap();
+	private HashMap<String, String> colorTable = new HashMap();
 	
-	public MoveReader()
+	Game game;
+	
+	public MoveReader(Game game)
 	{
 		pieceTable.put("K", "King");
 		pieceTable.put("Q", "Queen");
@@ -50,6 +53,7 @@ public final class MoveReader
 		colorTable.put("L", "White");
 		colorTable.put("D", "Black");
 		
+		this.game = game;
 	}
 	
 	public void convertFileToList(String fileName)
@@ -94,10 +98,10 @@ public final class MoveReader
 	
 	public void interpretCommand(String commandString)
 	{
+		Board board = game.getBoard();
 		Matcher m = null;
-		/*
 		String symbol1 = null;
-		String symbol2 = null;*/
+		String symbol2 = null;
 		for(StringPattern sp : stringPatterns)
 		{
 			if(sp.getCommandType() == returnCommandType(commandString))
@@ -107,6 +111,7 @@ public final class MoveReader
 			}
 		}
 		
+		
 		//just print line depending on the command
 		switch(returnCommandType(commandString))
 		{
@@ -114,6 +119,9 @@ public final class MoveReader
 			String pieceName = pieceTable.get(m.group("piece"));
 			String color = colorTable.get(m.group("color"));
 			String squareName = m.group("column") + m.group("row");
+			
+			board.returnSquare(squareName).setDisplaySymbol(m.group("piece"));
+			
 			System.out.println(color + " " + pieceName + " placed on " + squareName);
 			break;
 		case MOVEMENT:

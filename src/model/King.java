@@ -2,12 +2,13 @@ package model;
 
 public class King extends Piece
 {
-	public static String symbol = "K";
+	private String displaySymbol = "K";
 	public static String name = "King";
 	
-	public King()
+	public King(TeamColor color)
 	{
-		
+		this.teamColor = color;
+		displaySymbol = this.teamColor.equals(TeamColor.WHITE) ? "k" : "K";
 	}
 
 }
