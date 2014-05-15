@@ -15,6 +15,9 @@ import model.Board;
 import model.Game;
 import model.King;
 import model.Piece;
+import model.Piece.TeamColor;
+import model.Placer;
+import model.Square;
 
 public final class MoveReader 
 {
@@ -35,12 +38,10 @@ public final class MoveReader
 	
 	static StringPattern[] stringPatterns = {placementPattern, movementPattern, capturePattern, castlePattern};
 	
-	private HashMap<String, String> pieceTable = new HashMap();
-	private HashMap<String, String> colorTable = new HashMap();
+	private static HashMap<String, String> pieceTable = new HashMap<String, String>();
+	private static HashMap<String, TeamColor> colorTable = new HashMap<String, TeamColor>();
 	
-	Game game;
-	
-	public MoveReader(Game game)
+	static
 	{
 		pieceTable.put("K", "King");
 		pieceTable.put("Q", "Queen");
@@ -49,14 +50,19 @@ public final class MoveReader
 		pieceTable.put("N", "Knight");
 		pieceTable.put("P", "Pawn");
 		
-		
-		colorTable.put("L", "White");
-		colorTable.put("D", "Black");
-		
+		colorTable.put("L", TeamColor.WHITE);
+		colorTable.put("D", TeamColor.BLACK);
+	}
+	
+	
+	Game game;
+	
+	public MoveReader(Game game)
+	{
 		this.game = game;
 	}
 	
-	public void convertFileToList(String fileName)
+	public void interpretFile(String fileName)
 	{
 		File file = new File(fileName);
 		
@@ -117,30 +123,102 @@ public final class MoveReader
 		{
 		case PLACEMENT:
 			String pieceName = pieceTable.get(m.group("piece"));
-			String color = colorTable.get(m.group("color"));
+			TeamColor color = colorTable.get(m.group("color"));
 			String squareName = m.group("column") + m.group("row");
 			
-			board.returnSquare(squareName).setDisplaySymbol(m.group("piece"));
+			board.returnSquare(squareName).setPiece(Placer.returnPiece(m.group("piece"), color));
+			//board.returnSquare(squareName).setDisplaySymbol(m.group("piece"));
 			
-			System.out.println(color + " " + pieceName + " placed on " + squareName);
+			//System.out.println(color + " " + pieceName + " placed on " + squareName);
 			break;
 		case MOVEMENT:
-			String moveSquare1 = m.group("column1") + m.group("row1");
-			String moveSquare2 = m.group("column2") + m.group("row2");
-			System.out.println("Moved piece from " + moveSquare1 + " to " + moveSquare2);
+			Square moveSquare1 = board.returnSquare(m.group("column1") + m.group("row1"));
+			Square moveSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
+			
+			//check if first square is empty
+			if(moveSquare1.isEmpty())
+			{
+				System.out.println("No piece to move on " + moveSquare1);
+				
+			}
+			else if(!moveSquare2.isEmpty())
+			{
+				System.out.println(moveSquare2 + " is already occupied.");
+			}
+			else
+			{
+				Piece movedPiece = moveSquare1.getPiece();
+				moveSquare2.setPiece(movedPiece);
+				//clear
+				moveSquare1.clearPiece();
+				System.out.println("Moved " + movedPiece.getName() +" from " + moveSquare1 + " to " + moveSquare2);
+			}
+			
+			
 			break;
 		case CAPTURE:
-			String captureSquare1 = m.group("column1") + m.group("row1");
-			String captureSquare2 = m.group("column2") + m.group("row2");
-			System.out.println("Moved piece from " + captureSquare1 + " to capture piece on " + captureSquare2);
+			Square captureSquare1 = board.returnSquare(m.group("column1") + m.group("row1"));
+			Square captureSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
+			
+			if(captureSquare1.isEmpty())
+			{
+				System.out.println("No piece to move on " + captureSquare1);
+			}
+			else if(captureSquare2.isEmpty())
+			{
+				System.out.println("No piece to capture on " + captureSquare2);
+			}
+			else
+			{
+				//if colors of two pieces are the same
+				if(captureSquare1.getPiece().getColor() == captureSquare2.getPiece().getColor())
+				{
+					System.out.println("Can't capture pieces on your side");
+				}
+				//everything checks out okay
+				else
+				{
+					Piece capturingPiece = captureSquare1.getPiece();
+					Piece capturedPiece = captureSquare2.getPiece();
+					captureSquare2.setPiece(capturingPiece);
+					//clear
+					captureSquare1.clearPiece();
+					
+					System.out.println("Moved " + capturingPiece.getName() + " from " + captureSquare1 + " to capture " + capturedPiece.getName() + " on " + captureSquare2);
+				}
+			}
+			
+			
 			break;
 		case CASTLING:
-			String castleSquare1 = m.group("p1column1") + m.group("p1row1");
-			String castleSquare2 = m.group("p1column2") + m.group("p1row2");
-			String castleSquare3 = m.group("p2column1") + m.group("p2row1");
-			String castleSquare4 = m.group("p2column2") + m.group("p2row2");
-			System.out.println("Moved piece from " + castleSquare1 + " to " + castleSquare2 
-					+ ", and moved piece from " + castleSquare3 + " to " + castleSquare4);
+			Square castleSquare1 = board.returnSquare(m.group("p1column1") + m.group("p1row1"));
+			Square castleSquare2 = board.returnSquare(m.group("p1column2") + m.group("p1row2"));
+			Square castleSquare3 = board.returnSquare(m.group("p2column1") + m.group("p2row1"));
+			Square castleSquare4 = board.returnSquare(m.group("p2column2") + m.group("p2row2"));
+			
+			if(castleSquare1.isEmpty() || castleSquare3.isEmpty())
+			{
+				System.out.println("No piece to move!");
+			}
+			else if(!castleSquare2.isEmpty() || !castleSquare4.isEmpty())
+			{
+				System.out.println("One or both squares are already occupied.");
+			}
+			else
+			{
+				Piece k = castleSquare1.getPiece();
+				Piece r = castleSquare3.getPiece();
+				
+				castleSquare2.setPiece(k);
+				castleSquare4.setPiece(r);
+				
+				castleSquare1.clearPiece();
+				castleSquare3.clearPiece();
+				
+				System.out.println("Moved piece from " + castleSquare1 + " to " + castleSquare2 
+						+ ", and moved piece from " + castleSquare3 + " to " + castleSquare4);
+			}
+			
 			break;
 		case INVALID:
 			System.out.println("Invalid move");

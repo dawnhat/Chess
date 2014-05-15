@@ -8,16 +8,23 @@ public class Board
 	private final int BOARD_LENGTH = 8;
 	private Square[][] board = new Square[BOARD_LENGTH][BOARD_LENGTH];
 	private String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H"};
+	private HashMap<String, Square> hashBoard;
 	
 	public Board()
 	{	
+		
+		hashBoard = new HashMap<String, Square>();
 		int l = 8;
 		for(int i = 0; i < BOARD_LENGTH; i++)
 		{
 			
 			for(int u = 0; u < BOARD_LENGTH; u++)
 			{
-				board[i][u] = new Square(letters[u] + "" + l);
+				String squareID = letters[u] + "" + l;
+				Square newSquare = new Square(squareID);
+				board[i][u] = newSquare;
+				hashBoard.put(squareID, newSquare);
+				
 				//System.out.println(letters[u] + "" + l);
 				
 			}
@@ -52,6 +59,9 @@ public class Board
 	{
 		
 		Square square = null;
+		
+		square = hashBoard.get(squareID);
+		/*
 		for(int i = 0; i < BOARD_LENGTH; i++)
 		{
 			for(Square s : board[i])
@@ -61,7 +71,7 @@ public class Board
 					square = s;
 				}
 			}
-		}
+		}*/
 		
 		
 		return square;

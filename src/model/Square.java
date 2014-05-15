@@ -1,5 +1,6 @@
 package model;
 
+import model.Piece.TeamColor;
 
 public class Square 
 {
@@ -40,7 +41,12 @@ public class Square
 	
 	public boolean isEmpty()
 	{
+		/*
 		if(displaySymbol.equals(" - "))
+		{
+			return true;
+		}*/
+		if(this.piece == null)
 		{
 			return true;
 		}
@@ -73,7 +79,14 @@ public class Square
 	public void setPiece(Piece piece)
 	{
 		this.piece = piece;
-		setDisplaySymbol(piece.displaySymbol);
+
+		setDisplaySymbol(piece.getSymbol());
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.squareID;
 	}
 	
 	

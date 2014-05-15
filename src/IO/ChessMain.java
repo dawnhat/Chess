@@ -11,7 +11,7 @@ public class ChessMain
 		Game game = new Game(new Board());
 		MoveReader moveReader = new MoveReader(game);
 		//moveReader.convertFileToList("src/moves.txt");
-		moveReader.convertFileToList(args[0]);
+		moveReader.interpretFile(args[0]);
 		
 		
 		game.getBoard().display();
