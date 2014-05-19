@@ -1,9 +1,15 @@
 package model;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class Piece {
 	protected String displaySymbol;
 	protected String name;
 	protected TeamColor teamColor;
+	protected HashSet<String> possibleMoves;
+	
 	
 	public String getSymbol()
 	{
@@ -25,6 +31,8 @@ public abstract class Piece {
 	{
 		return this.teamColor;
 	}
+	
+	public abstract Set getPossibleMoves(Square square, Board board);
 	
 	public enum TeamColor
 	{

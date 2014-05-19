@@ -5,24 +5,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import model.Action;
 import model.Board;
 import model.Game;
 import model.King;
+import model.MoveAction;
 import model.Piece;
 import model.Piece.TeamColor;
+import model.PlaceAction;
 import model.Placer;
 import model.Square;
 
 public final class MoveReader 
 {
 	/*
-	 * QLD1
+	 * This class should be organized so that it reads moves and recognizes patterns, but doesn't actually execute
+	 * the moves (that's Action's job).
 	 */
 	static FileReader input = null;
 	
@@ -57,6 +62,8 @@ public final class MoveReader
 	
 	Game game;
 	
+	ArrayList<Action> actionList = new ArrayList<Action>();
+	
 	public MoveReader(Game game)
 	{
 		this.game = game;
@@ -88,7 +95,6 @@ public final class MoveReader
 		
 	}
 	
-	//<CommandType, StringPattern>
 	private static CommandType returnCommandType(String commandString)
 	{
 		CommandType type = CommandType.INVALID;
@@ -106,8 +112,8 @@ public final class MoveReader
 	{
 		Board board = game.getBoard();
 		Matcher m = null;
-		String symbol1 = null;
-		String symbol2 = null;
+		//String symbol1 = null;
+		//String symbol2 = null;
 		for(StringPattern sp : stringPatterns)
 		{
 			if(sp.getCommandType() == returnCommandType(commandString))
@@ -117,42 +123,66 @@ public final class MoveReader
 			}
 		}
 		
+		//TODO: change error messages; make sure they throw an exception instead
+		//Take these out; the IO shouldn't be making game changes
 		
-		//just print line depending on the command
 		switch(returnCommandType(commandString))
 		{
 		case PLACEMENT:
-			String pieceName = pieceTable.get(m.group("piece"));
+
+			//old
 			TeamColor color = colorTable.get(m.group("color"));
 			String squareName = m.group("column") + m.group("row");
 			
-			board.returnSquare(squareName).setPiece(Placer.returnPiece(m.group("piece"), color));
-			//board.returnSquare(squareName).setDisplaySymbol(m.group("piece"));
+			Piece p = Placer.returnPiece(m.group("piece"), color);
+			Square s = board.returnSquare(m.group("column") + m.group("row"));
 			
-			//System.out.println(color + " " + pieceName + " placed on " + squareName);
+			board.returnSquare(squareName).setPiece(Placer.returnPiece(m.group("piece"), color));
+
+			
+			//new
+			actionList.add(new PlaceAction(p, s));
+			
 			break;
 		case MOVEMENT:
+			
+			//old
 			Square moveSquare1 = board.returnSquare(m.group("column1") + m.group("row1"));
 			Square moveSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
 			
 			//check if first square is empty
 			if(moveSquare1.isEmpty())
 			{
+				
 				System.out.println("No piece to move on " + moveSquare1);
 				
 			}
-			else if(!moveSquare2.isEmpty())
-			{
-				System.out.println(moveSquare2 + " is already occupied.");
-			}
 			else
 			{
+				//here, check if the second square is in the valid move list
 				Piece movedPiece = moveSquare1.getPiece();
-				moveSquare2.setPiece(movedPiece);
-				//clear
-				moveSquare1.clearPiece();
-				System.out.println("Moved " + movedPiece.getName() +" from " + moveSquare1 + " to " + moveSquare2);
+				//i.e. if the 2nd square is within the moves that this piece can move to
+				if(movedPiece.getPossibleMoves(moveSquare1, game.getBoard()).contains(moveSquare2.getSquareID()))
+				{
+					//if the square is occupied
+					if(!moveSquare2.isEmpty())
+					{
+						System.out.println(moveSquare2 + " is already occupied.");
+					}
+					else
+					{		
+						moveSquare2.setPiece(movedPiece);
+						//clear
+						moveSquare1.clearPiece();
+						System.out.println("Moved " + movedPiece.getName() +" from " + moveSquare1 + " to " + moveSquare2);
+					}
+				}
+				
 			}
+			
+			//new
+			actionList.add(new MoveAction(moveSquare1, moveSquare2));
+			
 			
 			
 			break;

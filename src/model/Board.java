@@ -14,7 +14,7 @@ public class Board
 	{	
 		
 		hashBoard = new HashMap<String, Square>();
-		int l = 8;
+		int l = BOARD_LENGTH;
 		for(int i = 0; i < BOARD_LENGTH; i++)
 		{
 			
@@ -38,6 +38,7 @@ public class Board
 		return this.BOARD_LENGTH;
 	}
 	
+	/*
 	public void display()
 	{
 		
@@ -54,6 +55,7 @@ public class Board
 			System.out.println("");
 		}
 	}
+	*/
 	
 	public Square returnSquare(String squareID)
 	{
