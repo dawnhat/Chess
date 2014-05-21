@@ -13,10 +13,9 @@ public class MoveAction extends Action
 	}
 	
 	@Override
-	public void execute(Board board) 
+	public boolean execute(Board board) 
 	{
-		// TODO Auto-generated method stub
-		
+		boolean executed = false;
 		if(square1.isEmpty())
 		{
 			System.err.println("No piece to move on " + square1);
@@ -27,24 +26,28 @@ public class MoveAction extends Action
 			if(movedPiece.getPossibleMoves(square1, board).contains(square2))
 			{
 				//if the square is occupied
-				if(!square2.isEmpty())
-				{
-					System.err.println(square2 + " is already occupied.");
-				}
-				else
-				{
-					square2.setPiece(movedPiece);
-					//clear
-					square1.clearPiece();
-					System.out.println("Moved " + movedPiece.getName() + " from " + square1 + " to " + square2);
-				}
+				
+				square2.setPiece(movedPiece);
+				//clear
+				square1.clearPiece();
+				System.out.println("Moved " + movedPiece.getName() + " from " + square1 + " to " + square2);
+				executed = true;
 				
 			}
 			else
 			{
 				System.err.println("Not a valid move for " + movedPiece.getName());
 			}
+			
+			/*
+			for(Square s : movedPiece.possibleMoves)
+			{
+				System.out.println(s);
+			}
+			*/
 		}
+		
+		return executed;
 		
 	}
 

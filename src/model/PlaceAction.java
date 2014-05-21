@@ -16,9 +16,10 @@ public class PlaceAction extends Action
 	}
 
 	@Override
-	public void execute(Board board) 
+	public boolean execute(Board board) 
 	{
 		board.returnSquare(square.getSquareID()).setPiece(placedPiece);
+		return true;
 		
 	}
 	

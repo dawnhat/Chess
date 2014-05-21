@@ -12,9 +12,10 @@ public class CaptureAction extends Action
 		this.actionType = ActionType.CAPTURE;
 	}
 	@Override
-	public void execute(Board board)
+	public boolean execute(Board board)
 	{
 		// TODO Auto-generated method stub
+		boolean executed = false;
 		if(square1.isEmpty())
 		{
 			System.err.println("No piece to move on " + square1);
@@ -35,6 +36,7 @@ public class CaptureAction extends Action
 				square1.clearPiece();
 				
 				System.out.println("Moved " + capturingPiece.getName() + " from " + square1 + " to capture " + capturedPiece.getName() + " on " + square2);
+				executed = true;
 			}
 			else
 			{
@@ -42,6 +44,7 @@ public class CaptureAction extends Action
 			}
 		}
 		
+		return executed;
 		
 	}
 

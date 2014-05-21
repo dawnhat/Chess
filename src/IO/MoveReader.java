@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import model.Action;
 import model.Board;
+import model.CaptureAction;
 import model.Game;
 import model.King;
 import model.MoveAction;
@@ -131,25 +132,31 @@ public final class MoveReader
 		case PLACEMENT:
 
 			//old
+			
 			TeamColor color = colorTable.get(m.group("color"));
 			String squareName = m.group("column") + m.group("row");
 			
 			Piece p = Placer.returnPiece(m.group("piece"), color);
 			Square s = board.returnSquare(m.group("column") + m.group("row"));
 			
+			/*
 			board.returnSquare(squareName).setPiece(Placer.returnPiece(m.group("piece"), color));
-
+			*/
 			
 			//new
 			actionList.add(new PlaceAction(p, s));
 			
+			
 			break;
 		case MOVEMENT:
 			
-			//old
+			
+			
 			Square moveSquare1 = board.returnSquare(m.group("column1") + m.group("row1"));
 			Square moveSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
 			
+			//old
+			/*
 			//check if first square is empty
 			if(moveSquare1.isEmpty())
 			{
@@ -179,6 +186,7 @@ public final class MoveReader
 				}
 				
 			}
+			*/
 			
 			//new
 			actionList.add(new MoveAction(moveSquare1, moveSquare2));
@@ -187,9 +195,12 @@ public final class MoveReader
 			
 			break;
 		case CAPTURE:
+			
 			Square captureSquare1 = board.returnSquare(m.group("column1") + m.group("row1"));
 			Square captureSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
 			
+			/*
+			//old
 			if(captureSquare1.isEmpty())
 			{
 				System.out.println("No piece to move on " + captureSquare1);
@@ -217,7 +228,9 @@ public final class MoveReader
 					System.out.println("Moved " + capturingPiece.getName() + " from " + captureSquare1 + " to capture " + capturedPiece.getName() + " on " + captureSquare2);
 				}
 			}
-			
+			*/
+			//new
+			actionList.add(new CaptureAction(captureSquare1, captureSquare2));
 			
 			break;
 		case CASTLING:
@@ -251,7 +264,8 @@ public final class MoveReader
 			
 			break;
 		case INVALID:
-			System.out.println("Invalid move");
+			System.err.println(commandString + " is an invalid move");
+			
 			break;
 		}
 	}

@@ -8,7 +8,7 @@ public abstract class Piece {
 	protected String displaySymbol;
 	protected String name;
 	protected TeamColor teamColor;
-	protected HashSet<String> possibleMoves;
+	protected HashSet<Square> possibleMoves;
 	
 	
 	public String getSymbol()
@@ -32,7 +32,7 @@ public abstract class Piece {
 		return this.teamColor;
 	}
 	
-	public abstract Set getPossibleMoves(Square square, Board board);
+	public abstract Set getPossibleMoves(Square currentSquare, Board board);
 	
 	public enum TeamColor
 	{

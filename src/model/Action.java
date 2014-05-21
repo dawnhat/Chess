@@ -7,7 +7,7 @@ public abstract class Action
 	protected ActionType actionType;
 	protected String commandString;
 	
-	public abstract void execute(Board b);
+	public abstract boolean execute(Board b);
 	
 	
 	public enum ActionType
