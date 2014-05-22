@@ -18,9 +18,15 @@ public class PlaceAction extends Action
 	@Override
 	public boolean execute(Board board) 
 	{
-		board.returnSquare(square.getSquareID()).setPiece(placedPiece);
+		square.setPiece(placedPiece);
 		return true;
 		
+	}
+
+	@Override
+	public boolean setActionColor() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 

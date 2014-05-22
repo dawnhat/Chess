@@ -20,19 +20,20 @@ public class Bishop extends Piece
 	public Set getPossibleMoves(Square currentSquare, Board board) {
 		possibleMoves.clear();
 		boolean pieceFound = false;
-
+		Square tempSquare;
+		
 		for(int i = 1; currentSquare.convertRowIndex()+i <= board.getBoardLength()-1 && currentSquare.convertColumnIndex()+i <= board.getBoardLength()-1 && !pieceFound; i++)
 		{
-			//straight down	
-			if(board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()+i).getPiece() == null)
+			tempSquare = board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()+i);
+			if(tempSquare.isEmpty())
 			{
-				possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()+i));	
+				possibleMoves.add(tempSquare);	
 			}
 			else
 			{
-				if(this.teamColor != board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()+i).getPiece().getColor())
+				if(this.teamColor != tempSquare.getPiece().getColor())
 				{
-					possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()+i));	
+					possibleMoves.add(tempSquare);	
 				}
 				pieceFound = true;
 			}
@@ -41,16 +42,16 @@ public class Bishop extends Piece
 		pieceFound = false;
 		for(int i = 1; currentSquare.convertRowIndex()-i >= 0 && currentSquare.convertColumnIndex()+i <= board.getBoardLength()-1 && !pieceFound; i++)
 		{
-			//straight down	
-			if(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()+i).getPiece() == null)
+			tempSquare = board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()+i);
+			if(tempSquare.isEmpty())
 			{
-				possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()+i));	
+				possibleMoves.add(tempSquare);	
 			}
 			else
 			{
-				if(this.teamColor != board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()+i).getPiece().getColor())
+				if(this.teamColor != tempSquare.getPiece().getColor())
 				{
-					possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()+i));	
+					possibleMoves.add(tempSquare);	
 				}
 				pieceFound = true;
 			}
@@ -59,16 +60,16 @@ public class Bishop extends Piece
 		pieceFound = false;
 		for(int i = 1; currentSquare.convertRowIndex()-i >= 0 && currentSquare.convertColumnIndex()-i >= 0 && !pieceFound; i++)
 		{
-			//straight down	
-			if(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()-i).getPiece() == null)
+			tempSquare = board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()-i);
+			if(tempSquare.isEmpty())
 			{
-				possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()-i));	
+				possibleMoves.add(tempSquare);	
 			}
 			else
 			{
-				if(this.teamColor != board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()-i).getPiece().getColor())
+				if(this.teamColor != tempSquare.getPiece().getColor())
 				{
-					possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()-i));	
+					possibleMoves.add(tempSquare);	
 				}
 				pieceFound = true;
 			}
@@ -77,16 +78,16 @@ public class Bishop extends Piece
 		pieceFound = false;
 		for(int i = 1; currentSquare.convertRowIndex()+i <= board.getBoardLength()-1 && currentSquare.convertColumnIndex()-i >= 0 && !pieceFound; i++)
 		{
-			//straight down	
-			if(board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()-i).getPiece() == null)
+			tempSquare = board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()-i);
+			if(tempSquare.isEmpty())
 			{
-				possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()-i));	
+				possibleMoves.add(tempSquare);	
 			}
 			else
 			{
-				if(this.teamColor != board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()-i).getPiece().getColor())
+				if(this.teamColor != tempSquare.getPiece().getColor())
 				{
-					possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()+i, currentSquare.convertColumnIndex()-i));	
+					possibleMoves.add(tempSquare);	
 				}
 				pieceFound = true;
 			}

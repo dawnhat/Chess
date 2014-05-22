@@ -47,5 +47,10 @@ public class CaptureAction extends Action
 		return executed;
 		
 	}
+	@Override
+	public boolean setActionColor() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

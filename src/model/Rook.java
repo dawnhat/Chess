@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import model.Piece.TeamColor;
@@ -12,6 +13,7 @@ public class Rook extends Piece
 		this.name = "Rook";
 		this.teamColor = color;
 		displaySymbol = this.teamColor.equals(TeamColor.WHITE) ? "r" : "R";
+		possibleMoves = new HashSet<Square>();
 	}
 
 	@Override
@@ -40,7 +42,6 @@ public class Rook extends Piece
 		pieceFound = false;
 		for(int i = 1; currentSquare.convertColumnIndex()+i <= board.getBoardLength()-1 && !pieceFound; i++)
 		{
-			//straight down	
 			if(board.returnSquareAt(currentSquare.convertRowIndex(), currentSquare.convertColumnIndex()+i).getPiece() == null)
 			{
 				possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex(), currentSquare.convertColumnIndex()+i));	
@@ -59,7 +60,7 @@ public class Rook extends Piece
 		pieceFound = false;
 		for(int i = 1; currentSquare.convertColumnIndex()-i >= 0 && !pieceFound; i++)
 		{
-			//straight down	
+			
 			if(board.returnSquareAt(currentSquare.convertRowIndex(), currentSquare.convertColumnIndex()-i).getPiece() == null)
 			{
 				possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex(), currentSquare.convertColumnIndex()-i));	
@@ -78,7 +79,7 @@ public class Rook extends Piece
 		pieceFound = false;
 		for(int i = 1; currentSquare.convertRowIndex()-i >= 0 && !pieceFound; i++)
 		{
-			//straight down	
+			
 			if(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()).getPiece() == null)
 			{
 				possibleMoves.add(board.returnSquareAt(currentSquare.convertRowIndex()-i, currentSquare.convertColumnIndex()));	

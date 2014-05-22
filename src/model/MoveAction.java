@@ -1,21 +1,49 @@
 package model;
 
+import model.Piece.TeamColor;
+
 public class MoveAction extends Action
 {
 	private Square square1;
 	private Square square2;
 	
-	public MoveAction(Square s1, Square s2)
+	public MoveAction(TeamColor actionColor, Square s1, Square s2)
 	{
 		this.square1 = s1;
 		this.square2 = s2;
 		this.actionType = ActionType.MOVEMENT;
+		this.actionColor = actionColor;
 	}
+	
+	
+	
+	public MoveAction(Square s1, Square s2)
+	{
+		
+		this.square1 = s1;
+		this.square2 = s2;
+		this.actionType = ActionType.MOVEMENT;
+		
+	}
+	
+	public boolean setActionColor()
+	{
+		boolean setColor = false;
+		if(!square1.isEmpty())
+		{
+			setColor = true;
+			actionColor = square1.getPiece().getColor();
+		}
+		
+		return setColor;
+	}
+	
 	
 	@Override
 	public boolean execute(Board board) 
 	{
 		boolean executed = false;
+		
 		if(square1.isEmpty())
 		{
 			System.err.println("No piece to move on " + square1);
@@ -27,10 +55,21 @@ public class MoveAction extends Action
 			{
 				//if the square is occupied
 				
+				if(!square2.isEmpty())
+				{
+					Piece capturedPiece = square2.getPiece();
+					System.out.println("Moved " + movedPiece.getName() + " from " + square1 + " to capture "
+							+ capturedPiece.getName() + " on " + square2);
+				}
+				else
+				{
+					System.out.println("Moved " + movedPiece.getName() + " from " + square1 + " to " + square2);
+				}
 				square2.setPiece(movedPiece);
-				//clear
 				square1.clearPiece();
-				System.out.println("Moved " + movedPiece.getName() + " from " + square1 + " to " + square2);
+				
+				//clear
+				
 				executed = true;
 				
 			}
@@ -43,8 +82,8 @@ public class MoveAction extends Action
 			for(Square s : movedPiece.possibleMoves)
 			{
 				System.out.println(s);
-			}
-			*/
+			}*/
+			
 		}
 		
 		return executed;

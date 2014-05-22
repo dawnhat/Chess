@@ -15,7 +15,7 @@ public class Board
 		
 		hashBoard = new HashMap<String, Square>();
 		int l = BOARD_LENGTH;
-		for(int i = 0; i < BOARD_LENGTH; i++)
+		for(int i = 0; i < BOARD_LENGTH; i++, l--)
 		{
 			
 			for(int u = 0; u < BOARD_LENGTH; u++)
@@ -28,7 +28,8 @@ public class Board
 				//System.out.println(letters[u] + "" + l);
 				
 			}
-			l--;
+			//l--;
+
 		}
 		
 	}

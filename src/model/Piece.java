@@ -24,11 +24,12 @@ public abstract class Piece {
 	
 	public String getName()
 	{
-		return this.name;
+		return this.teamColor + " " + this.name;
 	}
 	
 	public TeamColor getColor()
 	{
+		//System.out.println(this.teamColor);
 		return this.teamColor;
 	}
 	
@@ -39,5 +40,6 @@ public abstract class Piece {
 		WHITE,
 		BLACK
 	}
+
 
 }

@@ -17,9 +17,10 @@ public class ChessMain
 		moveReader.interpretFile(args[1]);
 		
 		//processActions(game, moveReader.actionList);
+		game.setupBoard(moveReader.placeList);
+		game.displayBoard();
+		//moveReader.updateGame(game);
 		game.processActions(moveReader.actionList);
-		
-
 		
 	}
 	

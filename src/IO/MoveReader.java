@@ -26,10 +26,7 @@ import model.Square;
 
 public final class MoveReader 
 {
-	/*
-	 * This class should be organized so that it reads moves and recognizes patterns, but doesn't actually execute
-	 * the moves (that's Action's job).
-	 */
+	
 	static FileReader input = null;
 	
 	private final static String PLACEMENT_STRING = "(?<piece>[KQBRNPkqbrnp])(?<color>[DLdl])(?<column>[A-Ha-h])(?<row>[1-8])";
@@ -63,9 +60,15 @@ public final class MoveReader
 	
 	Game game;
 	
+	ArrayList<Action> placeList = new ArrayList<Action>();
 	ArrayList<Action> actionList = new ArrayList<Action>();
 	
 	public MoveReader(Game game)
+	{
+		this.game = game;
+	}
+	
+	public void updateGame(Game game)
 	{
 		this.game = game;
 	}
@@ -134,7 +137,6 @@ public final class MoveReader
 			//old
 			
 			TeamColor color = colorTable.get(m.group("color"));
-			String squareName = m.group("column") + m.group("row");
 			
 			Piece p = Placer.returnPiece(m.group("piece"), color);
 			Square s = board.returnSquare(m.group("column") + m.group("row"));
@@ -144,52 +146,20 @@ public final class MoveReader
 			*/
 			
 			//new
-			actionList.add(new PlaceAction(p, s));
+			placeList.add(new PlaceAction(p, s));
 			
 			
 			break;
 		case MOVEMENT:
-			
-			
-			
+			//game.displayBoard();
 			Square moveSquare1 = board.returnSquare(m.group("column1") + m.group("row1"));
 			Square moveSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
+		
+			//TeamColor actionColor = moveSquare1.getPiece().getColor();
+			MoveAction ma = new  MoveAction(moveSquare1, moveSquare2);
 			
-			//old
-			/*
-			//check if first square is empty
-			if(moveSquare1.isEmpty())
-			{
-				
-				System.out.println("No piece to move on " + moveSquare1);
-				
-			}
-			else
-			{
-				//here, check if the second square is in the valid move list
-				Piece movedPiece = moveSquare1.getPiece();
-				//i.e. if the 2nd square is within the moves that this piece can move to
-				if(movedPiece.getPossibleMoves(moveSquare1, game.getBoard()).contains(moveSquare2.getSquareID()))
-				{
-					//if the square is occupied
-					if(!moveSquare2.isEmpty())
-					{
-						System.out.println(moveSquare2 + " is already occupied.");
-					}
-					else
-					{		
-						moveSquare2.setPiece(movedPiece);
-						//clear
-						moveSquare1.clearPiece();
-						System.out.println("Moved " + movedPiece.getName() +" from " + moveSquare1 + " to " + moveSquare2);
-					}
-				}
-				
-			}
-			*/
+			actionList.add(ma);
 			
-			//new
-			actionList.add(new MoveAction(moveSquare1, moveSquare2));
 			
 			
 			
