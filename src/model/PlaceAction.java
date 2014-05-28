@@ -18,15 +18,33 @@ public class PlaceAction extends Action
 	@Override
 	public boolean execute(Board board) 
 	{
+		System.out.println(placedPiece + " placed on " + getSquare());
 		square.setPiece(placedPiece);
+		
 		return true;
 		
+	}
+	
+	public Piece getPiece()
+	{
+		return this.placedPiece;
+	}
+	
+	public Square getSquare()
+	{
+		return this.square;
 	}
 
 	@Override
 	public boolean setActionColor() {
-		// TODO Auto-generated method stub
-		return false;
+		this.actionColor = placedPiece.teamColor;
+		return true;
+	}
+	
+	public TeamColor getActionColor()
+	{
+		setActionColor();
+		return this.actionColor;
 	}
 	
 

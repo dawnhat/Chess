@@ -13,12 +13,15 @@ public abstract class Action
 	public abstract boolean execute(Board b);
 	
 	public abstract boolean setActionColor();
+	public abstract TeamColor getActionColor();
+	
 	public enum ActionType
 	{
 		PLACEMENT,
 		MOVEMENT,
 		CAPTURE,
-		CASTLING
+		CASTLING,
+		MOVECHECK
 	}
 
 }

@@ -6,6 +6,7 @@ public enum CommandType
 	MOVEMENT,
 	CAPTURE,
 	CASTLING, //google tells me castling is the ONLY move in chess where two pieces move in one turn, so there
-	INVALID
+	INVALID, 
+	MOVECHECK
 
 }

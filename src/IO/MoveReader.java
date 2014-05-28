@@ -18,6 +18,7 @@ import model.CaptureAction;
 import model.Game;
 import model.King;
 import model.MoveAction;
+import model.MoveCheck;
 import model.Piece;
 import model.Piece.TeamColor;
 import model.PlaceAction;
@@ -33,13 +34,15 @@ public final class MoveReader
 	private final static String MOVEMENT_STRING = "(?<column1>[A-Ha-h])(?<row1>[1-8])[ ](?<column2>[A-Ha-h])(?<row2>[1-8])";
 	private final static String CAPTURE_STRING = "(?<column1>[A-Ha-h])(?<row1>[1-8])[ ](?<column2>[A-Ha-h])(?<row2>[1-8])[*]";
 	private final static String CASTLE_STRING = "(?<p1column1>[A-Ha-h])(?<p1row1>[1-8])[ ](?<p1column2>[A-Ha-h])(?<p1row2>[1-8])[ ](?<p2column1>[A-Ha-h])(?<p2row1>[1-8])[ ](?<p2column2>[A-Ha-h])(?<p2row2>[1-8])";
+	private final static String CHECK_STRING = "(?<column1>[A-Ha-h])(?<row1>[1-8])";
 	
 	private static StringPattern placementPattern = new StringPattern(PLACEMENT_STRING, CommandType.PLACEMENT);
 	private static StringPattern movementPattern = new StringPattern(MOVEMENT_STRING, CommandType.MOVEMENT);
 	private static StringPattern capturePattern = new StringPattern(CAPTURE_STRING, CommandType.CAPTURE);
 	private static StringPattern castlePattern = new StringPattern(CASTLE_STRING, CommandType.CASTLING);
+	private static StringPattern checkPattern = new StringPattern(CHECK_STRING, CommandType.MOVECHECK);
 	
-	static StringPattern[] stringPatterns = {placementPattern, movementPattern, capturePattern, castlePattern};
+	static StringPattern[] stringPatterns = {placementPattern, movementPattern, capturePattern, castlePattern, checkPattern};
 	
 	private static HashMap<String, String> pieceTable = new HashMap<String, String>();
 	private static HashMap<String, TeamColor> colorTable = new HashMap<String, TeamColor>();
@@ -159,10 +162,13 @@ public final class MoveReader
 			MoveAction ma = new  MoveAction(moveSquare1, moveSquare2);
 			
 			actionList.add(ma);
+			break;
+		case MOVECHECK:
+			Square checkSquare = board.returnSquare(m.group("column1") + m.group("row1"));
+			MoveCheck mc = new MoveCheck(checkSquare);
 			
-			
-			
-			
+			actionList.add(mc);
+		
 			break;
 		case CAPTURE:
 			

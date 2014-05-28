@@ -38,6 +38,12 @@ public class MoveAction extends Action
 		return setColor;
 	}
 	
+	@Override
+	public TeamColor getActionColor() {
+		setActionColor();
+		return this.actionColor;
+	}
+	
 	
 	@Override
 	public boolean execute(Board board) 
@@ -70,6 +76,12 @@ public class MoveAction extends Action
 				
 				//clear
 				
+				if(movedPiece.name.equals("Pawn"))
+				{
+					Pawn p = (Pawn)movedPiece;
+					p.hasMoved = true;
+				}
+				
 				executed = true;
 				
 			}
@@ -89,5 +101,9 @@ public class MoveAction extends Action
 		return executed;
 		
 	}
+
+
+
+	
 
 }

@@ -1,5 +1,7 @@
 package model;
 
+import model.Piece.TeamColor;
+
 public class CaptureAction extends Action
 {
 	private Square square1;
@@ -51,6 +53,11 @@ public class CaptureAction extends Action
 	public boolean setActionColor() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	@Override
+	public TeamColor getActionColor() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,10 @@
 package model;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import model.Piece.TeamColor;
 
 
 
@@ -57,6 +62,55 @@ public class Board
 		}
 	}
 	*/
+	
+	public Set<Square> getTeamMoves(TeamColor color)
+	{
+		HashSet<Square> teamMoves = new HashSet<Square>();
+		
+		for(int i = 0; i < BOARD_LENGTH; i++)
+		{
+			for(int u = 0; u < BOARD_LENGTH; u++)
+			{
+				//if square is occupied by square
+				if(!board[i][u].isEmpty())
+				{
+					//if occupied by a piece of specified color
+					if(board[i][u].getPiece().getColor() == color)
+					{
+						HashSet<Square> moves = (HashSet<Square>) board[i][u].getPiece().getPossibleMoves(board[i][u], this);
+						teamMoves.addAll(moves);
+					}
+				}
+			}
+		}
+		
+		return teamMoves;
+	}
+	
+	public Square getPieceSquare(Piece piece)
+	{
+		Square s = null;
+		
+		for(int i = 0; i < BOARD_LENGTH; i++)
+		{
+			for(int u = 0; u < BOARD_LENGTH; u++)
+			{
+				//if square is occupied by square
+				if(!board[i][u].isEmpty())
+				{
+					//if occupied by a piece of specified color
+					if(board[i][u].getPiece().equals(piece))
+					{
+						s = board[i][u];
+					}
+				}
+			}
+		}
+		
+		return s;
+		
+		
+	}
 	
 	public Square returnSquare(String squareID)
 	{
