@@ -6,11 +6,13 @@ public class MoveAction extends Action
 {
 	private Square square1;
 	private Square square2;
+	private Piece piece;
 	
 	public MoveAction(TeamColor actionColor, Square s1, Square s2)
 	{
 		this.square1 = s1;
 		this.square2 = s2;
+		this.piece = s1.getPiece();
 		this.actionType = ActionType.MOVEMENT;
 		this.actionColor = actionColor;
 	}
@@ -25,6 +27,20 @@ public class MoveAction extends Action
 		this.actionType = ActionType.MOVEMENT;
 		
 	}
+	
+	public Piece getPiece()
+	{   
+		piece = square2.getPiece();
+		
+		return piece;
+	}
+	
+	public Square getFinalSquare()
+	{
+		return this.square2;
+	}
+	
+
 	
 	public boolean setActionColor()
 	{

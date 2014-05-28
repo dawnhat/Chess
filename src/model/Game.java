@@ -38,7 +38,12 @@ public class Game
 	{
 		for(Action a : placeList)
 		{
-			a.execute(board);
+			PlaceAction pa = (PlaceAction)a;
+			pa.execute(board);
+			
+			TeamColor color = pa.getPiece().getColor();
+			teams.get(color).addPiece(pa.getPiece(), pa.getSquare());
+			//System.out.println(pa.getPiece().getColor());
 		}
 	}
 	
@@ -63,11 +68,8 @@ public class Game
 		//get King's current location?
 		King k = kingTeam.getKing();
 
-		//THIS is null
-		System.out.println(k);
-		
-		//Problem: This returns null
-		//Square kingSquare = board.getPieceSquare(k);
+		//System.out.println("King" + k);
+
 		Square kingSquare = kingTeam.getPiecePosition(k);
 		
 		HashSet<Square> enemyMoves = (HashSet) board.getTeamMoves(enemyColor);
@@ -84,6 +86,35 @@ public class Game
 		return isInCheck;
 	}
 	
+	/*
+	public void processAction(Action action)
+	{
+		System.out.println("It is " + currentTurnColor + "'s turn.");
+		action.setActionColor();
+		//System.out.println(isKingInCheck(currentTurnColor));
+		if(isKingInCheck(currentTurnColor))
+		{
+			System.out.println(currentTurnColor + "'s King is in check.");
+		}
+		if(action.actionType != ActionType.MOVECHECK)
+		{
+			//acting out of turn
+			if(action.actionColor != currentTurnColor)
+			{
+				System.out.println("Invalid move; it is " + currentTurnColor + "'s turn");
+			}
+			else
+			{
+				if(action.execute(board))
+				{
+					displayBoard();
+					currentTurnColor = currentTurnColor == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+					System.out.println("It is now " + currentTurnColor + "'s turn.");
+				}
+			}
+		}
+	}*/
+	
 	public void processActions(ArrayList<Action> actionList)
 	{	
 		System.out.println("It is " + currentTurnColor + "'s turn.");
@@ -95,10 +126,7 @@ public class Game
 		{
 			a.setActionColor();
 			//this is where we check if someone is in check?
-			if(isKingInCheck(currentTurnColor))
-			{
-				System.out.println(currentTurnColor + "'s King is in check.");
-			}
+			
 			
 			if(a.actionType != ActionType.MOVECHECK)
 			{
@@ -107,13 +135,22 @@ public class Game
 				{
 					System.out.println("Invalid move; it is " + currentTurnColor + "'s turn");
 				}
-				else
+				else if(a.actionType == ActionType.MOVEMENT)
 				{
-					if(a.execute(board))
+					MoveAction ma = (MoveAction)a;
+					
+					if(ma.execute(board))
 					{
+						
+						teams.get(ma.actionColor).addPiece(ma.getPiece(), ma.getFinalSquare());
+						
 						displayBoard();
-						currentTurnColor = currentTurnColor == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+						currentTurnColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
 						System.out.println("It is now " + currentTurnColor + "'s turn.");
+						if(isKingInCheck(currentTurnColor))
+						{
+							System.out.println(currentTurnColor + "'s King is in check.");
+						}
 					}
 				}
 			}

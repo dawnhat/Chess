@@ -18,7 +18,7 @@ public class PlaceAction extends Action
 	@Override
 	public boolean execute(Board board) 
 	{
-		System.out.println(placedPiece + " placed on " + getSquare());
+		//System.out.println(placedPiece + " placed on " + getSquare());
 		square.setPiece(placedPiece);
 		
 		return true;

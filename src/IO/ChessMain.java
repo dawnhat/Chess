@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import view.Viewer;
 import model.*;
+import model.Piece.TeamColor;
 
 public class ChessMain 
 {
@@ -21,6 +22,7 @@ public class ChessMain
 		game.displayBoard();
 		//moveReader.updateGame(game);
 		game.processActions(moveReader.actionList);
+		//game.isKingInCheck(TeamColor.WHITE);
 		
 	}
 	

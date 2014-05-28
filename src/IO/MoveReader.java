@@ -150,6 +150,7 @@ public final class MoveReader
 			
 			//new
 			placeList.add(new PlaceAction(p, s));
+			//new PlaceAction(p, s).execute(board);
 			
 			
 			break;
@@ -162,12 +163,14 @@ public final class MoveReader
 			MoveAction ma = new  MoveAction(moveSquare1, moveSquare2);
 			
 			actionList.add(ma);
+			//ma.execute(board);
 			break;
 		case MOVECHECK:
 			Square checkSquare = board.returnSquare(m.group("column1") + m.group("row1"));
 			MoveCheck mc = new MoveCheck(checkSquare);
 			
 			actionList.add(mc);
+			//mc.execute(board);
 		
 			break;
 		case CAPTURE:

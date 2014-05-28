@@ -21,6 +21,17 @@ public class Team
 		this.teamPositions.put(piece, square);
 	}
 	
+	public void updatePiecePosition(Piece piece, Square square)
+	{
+		this.teamPositions.remove(piece);
+		this.teamPositions.put(piece, square);
+	}
+	
+	public void deletePiece(Piece piece)
+	{
+		this.teamPositions.remove(piece);
+	}
+	
 	public Square getPiecePosition(Piece piece)
 	{
 		Square position = null;
@@ -28,14 +39,7 @@ public class Team
 		
 		return position;
 	}
-	
-	public void print()
-	{
-		for(Piece p : teamPositions.keySet())
-		{
-			System.out.println("Class " + p.getClass());
-		}
-	}
+
 	
 	public King getKing()
 	{
