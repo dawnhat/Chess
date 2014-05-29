@@ -8,9 +8,10 @@ public abstract class Action
 	//Takes in the current state of the  board?
 	protected ActionType actionType;
 	protected TeamColor actionColor;
+	protected Game game;
 	//protected String commandString;
 	
-	public abstract boolean execute(Board b);
+	public abstract boolean execute();
 	
 	public abstract boolean setActionColor();
 	public abstract TeamColor getActionColor();

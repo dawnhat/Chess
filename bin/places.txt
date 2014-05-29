@@ -1,4 +1,4 @@
-kdd5
-qdf5
-qld2
-klf2
+kde5
+qlf8
+qdh8
+plh1

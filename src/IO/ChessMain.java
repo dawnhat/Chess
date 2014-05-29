@@ -26,17 +26,5 @@ public class ChessMain
 		
 	}
 	
-	public static void processActions(Game game, ArrayList<Action> actionList)
-	{
-		Viewer v = new Viewer();
-		for(Action a : actionList)
-		{
-			if(a.execute(game.getBoard()))
-			{
-				v.display(game.getBoard());
-			}
-			
-		}
-	}
 
 }

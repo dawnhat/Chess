@@ -7,14 +7,20 @@ public class CaptureAction extends Action
 	private Square square1;
 	private Square square2;
 	
-	public CaptureAction(Square s1, Square s2)
+	
+	public CaptureAction(Square s1, Square s2, Game game)
 	{
 		this.square1 = s1;
 		this.square2 = s2;
 		this.actionType = ActionType.CAPTURE;
+		this.game = game;
 	}
+	
+	
+	//FUTURE NOTE, have to update this if i ever need it
+	//deprecated for now
 	@Override
-	public boolean execute(Board board)
+	public boolean execute()
 	{
 		// TODO Auto-generated method stub
 		boolean executed = false;
@@ -31,7 +37,7 @@ public class CaptureAction extends Action
 			//if there IS a piece to move on square1 and if there IS a piece to capture on square 2, then
 			Piece capturingPiece = square1.getPiece();
 			Piece capturedPiece = square2.getPiece();
-			if(capturingPiece.getPossibleMoves(square1, board).contains(square2))
+			if(capturingPiece.getPossibleMoves(square1, game.getBoard()).contains(square2))
 			{
 				square2.setPiece(capturingPiece);
 				//clear

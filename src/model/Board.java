@@ -71,7 +71,7 @@ public class Board
 		{
 			for(int u = 0; u < BOARD_LENGTH; u++)
 			{
-				//if square is occupied by square
+				//if square is occupied by piece
 				if(!board[i][u].isEmpty())
 				{
 					//if occupied by a piece of specified color

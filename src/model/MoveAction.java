@@ -7,14 +7,15 @@ public class MoveAction extends Action
 	private Square square1;
 	private Square square2;
 	private Piece piece;
+	private Game game;
 	
-	public MoveAction(TeamColor actionColor, Square s1, Square s2)
+	public MoveAction(Square s1, Square s2, Game game)
 	{
 		this.square1 = s1;
 		this.square2 = s2;
 		this.piece = s1.getPiece();
 		this.actionType = ActionType.MOVEMENT;
-		this.actionColor = actionColor;
+		this.game = game;
 	}
 	
 	
@@ -62,7 +63,7 @@ public class MoveAction extends Action
 	
 	
 	@Override
-	public boolean execute(Board board) 
+	public boolean execute() 
 	{
 		boolean executed = false;
 		
@@ -73,7 +74,7 @@ public class MoveAction extends Action
 		else
 		{
 			Piece movedPiece = square1.getPiece();
-			if(movedPiece.getPossibleMoves(square1, board).contains(square2))
+			if(movedPiece.getPossibleMoves(square1, game.getBoard()).contains(square2))
 			{
 				//if the square is occupied
 				

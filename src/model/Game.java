@@ -39,7 +39,7 @@ public class Game
 		for(Action a : placeList)
 		{
 			PlaceAction pa = (PlaceAction)a;
-			pa.execute(board);
+			pa.execute();
 			
 			TeamColor color = pa.getPiece().getColor();
 			teams.get(color).addPiece(pa.getPiece(), pa.getSquare());
@@ -63,7 +63,7 @@ public class Game
 		
 		TeamColor enemyColor = (color == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
 		Team kingTeam = teams.get(color);
-		Team enemyTeam = teams.get(enemyColor);
+		//Team enemyTeam = teams.get(enemyColor);
 		//check every single enemy piece's moves and see if the king's current location is contained in the list
 		//get King's current location?
 		King k = kingTeam.getKing();
@@ -81,39 +81,10 @@ public class Game
 			isInCheck = true;
 		}
 		
-		//Should team know the position of every piece?
 		
 		return isInCheck;
 	}
 	
-	/*
-	public void processAction(Action action)
-	{
-		System.out.println("It is " + currentTurnColor + "'s turn.");
-		action.setActionColor();
-		//System.out.println(isKingInCheck(currentTurnColor));
-		if(isKingInCheck(currentTurnColor))
-		{
-			System.out.println(currentTurnColor + "'s King is in check.");
-		}
-		if(action.actionType != ActionType.MOVECHECK)
-		{
-			//acting out of turn
-			if(action.actionColor != currentTurnColor)
-			{
-				System.out.println("Invalid move; it is " + currentTurnColor + "'s turn");
-			}
-			else
-			{
-				if(action.execute(board))
-				{
-					displayBoard();
-					currentTurnColor = currentTurnColor == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
-					System.out.println("It is now " + currentTurnColor + "'s turn.");
-				}
-			}
-		}
-	}*/
 	
 	public void processActions(ArrayList<Action> actionList)
 	{	
@@ -125,9 +96,8 @@ public class Game
 		for(Action a : actionList)
 		{
 			a.setActionColor();
-			//this is where we check if someone is in check?
 			
-			
+
 			if(a.actionType != ActionType.MOVECHECK)
 			{
 				//acting out of turn
@@ -139,10 +109,13 @@ public class Game
 				{
 					MoveAction ma = (MoveAction)a;
 					
-					if(ma.execute(board))
+					if(ma.execute())
 					{
 						
 						teams.get(ma.actionColor).addPiece(ma.getPiece(), ma.getFinalSquare());
+						
+						//here i should be handling updating the teams
+						
 						
 						displayBoard();
 						currentTurnColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
@@ -156,7 +129,8 @@ public class Game
 			}
 			else
 			{
-				a.execute(board);
+				a.execute();
+				
 			}
 			/*
 			if(a.execute(board) && a.actionType != ActionType.PLACEMENT)

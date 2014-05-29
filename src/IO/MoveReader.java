@@ -160,14 +160,14 @@ public final class MoveReader
 			Square moveSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
 		
 			//TeamColor actionColor = moveSquare1.getPiece().getColor();
-			MoveAction ma = new  MoveAction(moveSquare1, moveSquare2);
+			MoveAction ma = new  MoveAction(moveSquare1, moveSquare2, game);
 			
 			actionList.add(ma);
 			//ma.execute(board);
 			break;
 		case MOVECHECK:
 			Square checkSquare = board.returnSquare(m.group("column1") + m.group("row1"));
-			MoveCheck mc = new MoveCheck(checkSquare);
+			MoveCheck mc = new MoveCheck(checkSquare, game);
 			
 			actionList.add(mc);
 			//mc.execute(board);
@@ -209,7 +209,7 @@ public final class MoveReader
 			}
 			*/
 			//new
-			actionList.add(new CaptureAction(captureSquare1, captureSquare2));
+			actionList.add(new CaptureAction(captureSquare1, captureSquare2, game));
 			
 			break;
 		case CASTLING:
