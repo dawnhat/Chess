@@ -77,7 +77,7 @@ public class Board
 					//if occupied by a piece of specified color
 					if(board[i][u].getPiece().getColor() == color)
 					{
-						HashSet<Square> moves = (HashSet<Square>) board[i][u].getPiece().getPossibleMoves(board[i][u], this);
+						HashSet<Square> moves = (HashSet<Square>)board[i][u].getPiece().getPossibleMoves(board[i][u], this);
 						teamMoves.addAll(moves);
 					}
 				}

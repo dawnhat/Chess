@@ -47,7 +47,6 @@ public class Team
 		
 		for(Piece p : teamPositions.keySet())
 		{
-			//System.out.println("Class" + p.getClass());
 			if(p instanceof model.King)
 			{
 				k = (King)p;
@@ -57,17 +56,6 @@ public class Team
 		return k;
 		
 	}
-	
-	
-	
-	/*
-	public void canMove(Square s, Board b)
-	{
-		for(Piece p : teamPieces)
-		{
-			p.getPossibleMoves
-		}
-	}*/
 	
 
 

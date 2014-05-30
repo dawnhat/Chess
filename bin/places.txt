@@ -2,3 +2,5 @@ kde5
 qlf8
 qdh8
 plh1
+klh4
+rda8

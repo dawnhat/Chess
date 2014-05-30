@@ -83,6 +83,10 @@ public class MoveAction extends Action
 					Piece capturedPiece = square2.getPiece();
 					System.out.println("Moved " + movedPiece.getName() + " from " + square1 + " to capture "
 							+ capturedPiece.getName() + " on " + square2);
+					
+					//remove the captured piece from its team for it is a failure
+					game.getTeams().get(capturedPiece.getColor()).deletePiece(capturedPiece);
+					
 				}
 				else
 				{
@@ -98,6 +102,9 @@ public class MoveAction extends Action
 					Pawn p = (Pawn)movedPiece;
 					p.hasMoved = true;
 				}
+				
+				//finally, update the piece's final position with its team
+				game.getTeams().get(movedPiece.getColor()).updatePiecePosition(movedPiece, square2);
 				
 				executed = true;
 				

@@ -34,6 +34,7 @@ public class Game
 		teams.put(TeamColor.WHITE, teamWhite);
 	}
 	
+	
 	public void setupBoard(ArrayList<Action> placeList)
 	{
 		for(Action a : placeList)
@@ -52,94 +53,95 @@ public class Game
 		return board;
 	}
 	
+	public HashMap<TeamColor, Team> getTeams()
+	{
+		return this.teams;
+	}
+	
 	public void displayBoard()
 	{
 		v.display(board);
 	}
 	
-	public boolean isKingInCheck(TeamColor color)
+	public boolean isKingInCheck()
 	{
 		boolean isInCheck = false;
 		
-		TeamColor enemyColor = (color == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-		Team kingTeam = teams.get(color);
-		//Team enemyTeam = teams.get(enemyColor);
-		//check every single enemy piece's moves and see if the king's current location is contained in the list
-		//get King's current location?
+		TeamColor enemyColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+		Team kingTeam = teams.get(currentTurnColor);
+
 		King k = kingTeam.getKing();
-
-		//System.out.println("King" + k);
-
 		Square kingSquare = kingTeam.getPiecePosition(k);
 		
-		HashSet<Square> enemyMoves = (HashSet) board.getTeamMoves(enemyColor);
-		//System.out.println(enemyMoves);
-		//System.out.println(kingSquare);
+		HashSet<Square> enemyMoves = (HashSet<Square>) board.getTeamMoves(enemyColor);
 		
-		if(enemyMoves.contains(kingSquare))
-		{
-			isInCheck = true;
-		}
-		
+		isInCheck = enemyMoves.contains(kingSquare);
+
 		
 		return isInCheck;
 	}
 	
 	
+	public boolean isKingInCheckmate(King king)
+	{
+		
+		//true until you find a move that takes the king out of check
+		boolean checkMated = true;
+		//Potential methods:
+		
+		/*
+		 * 1. Carry out ALL the moves from the king's team (including the king himself)
+		 * 		a. After a move is executed, check if the king is still in check
+		 * 		b. If after every move the king is still in check, the king and his team has no moves to take him out of check; this is checkmate
+		 * 2.  
+		 *
+		 *
+		 */
+		
+		
+		return checkMated;
+	}
+	
+	
 	public void processActions(ArrayList<Action> actionList)
 	{	
-		System.out.println("It is " + currentTurnColor + "'s turn.");
-		if(isKingInCheck(currentTurnColor))
-		{
-			System.out.println(currentTurnColor + "'s King is in check.");
-		}
+		notifyTurn();
 		for(Action a : actionList)
 		{
-			a.setActionColor();
+			//a.setActionColor();
 			
-
 			if(a.actionType != ActionType.MOVECHECK)
 			{
 				//acting out of turn
-				if(a.actionColor != currentTurnColor)
+				if(a.getActionColor() != currentTurnColor)
 				{
 					System.out.println("Invalid move; it is " + currentTurnColor + "'s turn");
 				}
 				else if(a.actionType == ActionType.MOVEMENT)
 				{
-					MoveAction ma = (MoveAction)a;
-					
-					if(ma.execute())
+					//MoveAction ma = (MoveAction)a;
+					if(a.execute())
 					{
-						
-						teams.get(ma.actionColor).addPiece(ma.getPiece(), ma.getFinalSquare());
-						
-						//here i should be handling updating the teams
-						
-						
 						displayBoard();
 						currentTurnColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-						System.out.println("It is now " + currentTurnColor + "'s turn.");
-						if(isKingInCheck(currentTurnColor))
-						{
-							System.out.println(currentTurnColor + "'s King is in check.");
-						}
+						notifyTurn();
 					}
 				}
 			}
 			else
 			{
 				a.execute();
-				
-			}
-			/*
-			if(a.execute(board) && a.actionType != ActionType.PLACEMENT)
-			{
-				displayBoard();
 			}
 			
-			*/
-			
+		}
+	}
+	
+	public void notifyTurn()
+	{
+		System.out.println("It is now " + currentTurnColor + "'s turn.");
+		if(isKingInCheck())
+		{
+			System.out.println(currentTurnColor + "'s King is in check.");
 		}
 	}
 
