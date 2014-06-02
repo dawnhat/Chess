@@ -93,6 +93,7 @@ public class MoveAction extends Action
 					System.out.println("Moved " + movedPiece.getName() + " from " + square1 + " to " + square2);
 				}
 				square2.setPiece(movedPiece);
+				//game.getTeams().get(movedPiece.getColor()).updatePiecePosition(movedPiece, square2);
 				square1.clearPiece();
 				
 				//clear

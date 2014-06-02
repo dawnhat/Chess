@@ -177,38 +177,7 @@ public final class MoveReader
 			
 			Square captureSquare1 = board.returnSquare(m.group("column1") + m.group("row1"));
 			Square captureSquare2 = board.returnSquare(m.group("column2") + m.group("row2"));
-			
-			/*
-			//old
-			if(captureSquare1.isEmpty())
-			{
-				System.out.println("No piece to move on " + captureSquare1);
-			}
-			else if(captureSquare2.isEmpty())
-			{
-				System.out.println("No piece to capture on " + captureSquare2);
-			}
-			else
-			{
-				//if colors of two pieces are the same
-				if(captureSquare1.getPiece().getColor() == captureSquare2.getPiece().getColor())
-				{
-					System.out.println("Can't capture pieces on your side");
-				}
-				//everything checks out okay
-				else
-				{
-					Piece capturingPiece = captureSquare1.getPiece();
-					Piece capturedPiece = captureSquare2.getPiece();
-					captureSquare2.setPiece(capturingPiece);
-					//clear
-					captureSquare1.clearPiece();
-					
-					System.out.println("Moved " + capturingPiece.getName() + " from " + captureSquare1 + " to capture " + capturedPiece.getName() + " on " + captureSquare2);
-				}
-			}
-			*/
-			//new
+
 			actionList.add(new CaptureAction(captureSquare1, captureSquare2, game));
 			
 			break;
@@ -248,13 +217,5 @@ public final class MoveReader
 			break;
 		}
 	}
-	
-	/*
-	 * Create a hashmap/dictionary indexed by their symbols (K, N, so on) with their values being the full name of the piece (King, Knight).
-	 */
-	
-	
-	
-	
 
 }

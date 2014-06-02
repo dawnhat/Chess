@@ -2,6 +2,10 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import model.Piece.TeamColor;
 
@@ -19,6 +23,22 @@ public class Team
 	public void addPiece(Piece piece, Square square)
 	{
 		this.teamPositions.put(piece, square);
+	}
+	
+	public Set<Piece> getPieces()
+	{
+		/*
+		Set<Piece> pieces = new HashSet<Piece>();
+		pieces = teamPositions.keySet();
+		
+		return pieces;*/
+		
+		return teamPositions.keySet();
+	}
+	
+	public Map<Piece, Square> getTeamPositions()
+	{
+		return this.teamPositions;
 	}
 	
 	public void updatePiecePosition(Piece piece, Square square)

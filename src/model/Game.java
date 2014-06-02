@@ -72,7 +72,7 @@ public class Game
 
 		King k = kingTeam.getKing();
 		Square kingSquare = kingTeam.getPiecePosition(k);
-		
+		//System.out.println(kingSquare);
 		HashSet<Square> enemyMoves = (HashSet<Square>) board.getTeamMoves(enemyColor);
 		
 		isInCheck = enemyMoves.contains(kingSquare);
@@ -82,9 +82,8 @@ public class Game
 	}
 	
 	
-	public boolean isKingInCheckmate(King king)
+	public boolean isKingInCheckmate()
 	{
-		
 		//true until you find a move that takes the king out of check
 		boolean checkMated = true;
 		//Potential methods:
@@ -92,14 +91,69 @@ public class Game
 		/*
 		 * 1. Carry out ALL the moves from the king's team (including the king himself)
 		 * 		a. After a move is executed, check if the king is still in check
-		 * 		b. If after every move the king is still in check, the king and his team has no moves to take him out of check; this is checkmate
+		 * 		b1. Once we find a move where the king is not checked, set checkMated to false and possibly break the loop
+		 * 		b2. If after every move the king is still in check, the king and his team has no moves to take him out of check; this is checkmate	
 		 * 2.  
-		 *
-		 *
 		 */
+
+		
+		HashSet<Square> allyMoves = (HashSet<Square>)board.getTeamMoves(currentTurnColor);
+		Team kingTeam = teams.get(currentTurnColor);
+		Team enemyTeam = teams.get((currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE);
+		
+		HashSet<Piece> pieces = new HashSet<Piece>(kingTeam.getPieces());
+		
+		//while(checkMated)
+		//{
+			for(Piece p : pieces)
+			{
+				Square initialPosition = kingTeam.getPiecePosition(p);
+				HashSet<Square> possibleMoves = (HashSet<Square>) p.getPossibleMoves(initialPosition, this.board);
+				
+				for(Square s : possibleMoves)
+				{
+					//make changes
+					initialPosition.clearPiece();
+					kingTeam.updatePiecePosition(p, s);
+					
+					Piece possiblePiece = s.getPiece();
+					
+					s.setPiece(p);
+					
+					//if the king is no longer in check, there is no checkmate
+					if(!isKingInCheck())
+					{
+						//System.out.println(p.getName() + ", " + s);
+						return false;
+					}					
+					//else, undo the changes and continue checking moves
+					
+					//undo changes
+					initialPosition.setPiece(p);
+					kingTeam.updatePiecePosition(p, initialPosition);
+					
+					if(possiblePiece != null)
+					{
+						s.setPiece(possiblePiece);
+						enemyTeam.addPiece(possiblePiece, s);
+					}
+					else
+					{
+						s.clearPiece();
+					}
+				}
+				
+				
+			}
+		//}
 		
 		
 		return checkMated;
+	}
+	
+	public void testMove()
+	{
+		
 	}
 	
 	
@@ -141,7 +195,15 @@ public class Game
 		System.out.println("It is now " + currentTurnColor + "'s turn.");
 		if(isKingInCheck())
 		{
-			System.out.println(currentTurnColor + "'s King is in check.");
+			//every time there is a check, check for checkmate
+			if(isKingInCheckmate())
+			{
+				System.out.println(currentTurnColor + "'s King has been checkmated; game over.");
+			}
+			else
+			{
+				System.out.println(currentTurnColor + "'s King is in check.");
+			}
 		}
 	}
 
