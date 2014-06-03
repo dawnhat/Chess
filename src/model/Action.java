@@ -22,7 +22,8 @@ public abstract class Action
 		MOVEMENT,
 		CAPTURE,
 		CASTLING,
-		MOVECHECK
+		MOVECHECK,
+		INVALID
 	}
 
 }

@@ -14,11 +14,13 @@ public class Board
 	private Square[][] board = new Square[BOARD_LENGTH][BOARD_LENGTH];
 	private String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H"};
 	private HashMap<String, Square> hashBoard;
+	private HashSet<Square> promoteSquares;
 	
 	public Board()
 	{	
 		
 		hashBoard = new HashMap<String, Square>();
+		promoteSquares = new HashSet<Square>();
 		int l = BOARD_LENGTH;
 		for(int i = 0; i < BOARD_LENGTH; i++, l--)
 		{
@@ -30,6 +32,10 @@ public class Board
 				board[i][u] = newSquare;
 				hashBoard.put(squareID, newSquare);
 				
+				if(l == 8 || l == 1)
+				{
+					promoteSquares.add(newSquare);
+				}
 				//System.out.println(letters[u] + "" + l);
 				
 			}
@@ -37,6 +43,14 @@ public class Board
 
 		}
 		
+		
+		
+		
+	}
+	
+	public Set<Square> returnPromoteSquares()
+	{
+		return this.promoteSquares;
 	}
 	
 	public int getBoardLength()

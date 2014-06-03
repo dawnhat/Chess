@@ -2,6 +2,7 @@ package IO;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import view.Viewer;
 import model.*;
@@ -16,13 +17,33 @@ public class ChessMain
 		moveReader.interpretFile(args[0]);
 		
 		moveReader.interpretFile(args[1]);
-		
-		//processActions(game, moveReader.actionList);
+
 		game.setupBoard(moveReader.placeList);
 		game.displayBoard();
 		//moveReader.updateGame(game);
-		game.processActions(moveReader.actionList);
-		//game.isKingInCheck(TeamColor.WHITE);
+		
+		//game.processActions(moveReader.actionList);
+		
+		Scanner scan = new Scanner(System.in);
+		game.notifyTurn();
+		while(game.isRunning())
+		{
+			game.processAction(moveReader.returnAction(scan.nextLine().toUpperCase()));
+		}
+		scan.close();
+		/*
+		while(game.isRunning())
+		{
+			try(Scanner scan = new Scanner(System.in))
+			{
+				game.processAction(moveReader.returnAction(scan.nextLine().toUpperCase()));
+			}
+		}*/
+		
+		
+		
+		
+
 		
 	}
 	

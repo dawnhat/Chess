@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Scanner;
 
 import model.Action.ActionType;
 import model.Piece.TeamColor;
@@ -17,7 +18,8 @@ public class Game
 	private Team teamBlack;
 	private Team teamWhite;
 	private HashMap<TeamColor, Team> teams;
-	
+	private boolean isRunning;
+	private Scanner scan;	
 	
 	public Game(Board board)
 	{
@@ -32,9 +34,14 @@ public class Game
 		
 		teams.put(TeamColor.BLACK, teamBlack);
 		teams.put(TeamColor.WHITE, teamWhite);
+		isRunning = true;
+		scan = new Scanner(System.in);
 	}
 	
-	
+	public boolean isRunning()
+	{
+		return isRunning;
+	}
 	public void setupBoard(ArrayList<Action> placeList)
 	{
 		for(Action a : placeList)
@@ -86,18 +93,8 @@ public class Game
 	{
 		//true until you find a move that takes the king out of check
 		boolean checkMated = true;
-		//Potential methods:
 		
-		/*
-		 * 1. Carry out ALL the moves from the king's team (including the king himself)
-		 * 		a. After a move is executed, check if the king is still in check
-		 * 		b1. Once we find a move where the king is not checked, set checkMated to false and possibly break the loop
-		 * 		b2. If after every move the king is still in check, the king and his team has no moves to take him out of check; this is checkmate	
-		 * 2.  
-		 */
-
-		
-		HashSet<Square> allyMoves = (HashSet<Square>)board.getTeamMoves(currentTurnColor);
+		//HashSet<Square> allyMoves = (HashSet<Square>)board.getTeamMoves(currentTurnColor);
 		Team kingTeam = teams.get(currentTurnColor);
 		Team enemyTeam = teams.get((currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE);
 		
@@ -146,59 +143,87 @@ public class Game
 				
 			}
 		//}
-		
+		 
 		
 		return checkMated;
 	}
 	
-	public void testMove()
+	//TODO pawn promotion
+	public void promotePawn(Pawn pawn)
 	{
+		TeamColor color = pawn.getColor();
+		Square position = teams.get(color).getPiecePosition(pawn);
+		//replace it with a piece of the same color
 		
+		Piece newPiece = null;
+		
+		System.out.println("Promote pawn to: ");
+		System.out.println("Q - Queen \nN - Knight\nB-Bishop \nR-Rook");
+		
+		newPiece = Placer.returnPiece(scan.nextLine().toUpperCase(), color);
+		
+		teams.get(color).addPiece(newPiece, position);
+		//remove pawn
+		teams.get(color).deletePiece(pawn);
 	}
 	
+	//TODO process single line actions
+	public void processAction(Action a)
+	{
+		
+		if(a.actionType != ActionType.MOVECHECK)
+		{
+			//acting out of turn
+			if(a.actionType == ActionType.INVALID)
+			{
+				a.execute();
+			}
+			else if(a.getActionColor() != currentTurnColor)
+			{
+				System.out.println("Invalid move; it is " + currentTurnColor + "'s turn");
+			}
+			else if(a.actionType == ActionType.MOVEMENT)
+			{
+				//MoveAction ma = (MoveAction)a;
+				if(a.execute())
+				{
+					displayBoard();
+					
+					currentTurnColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+					notifyTurn();
+				}
+			}
+		}
+		else
+		{
+			a.execute();
+		}
+	}
 	
+
 	public void processActions(ArrayList<Action> actionList)
 	{	
 		notifyTurn();
 		for(Action a : actionList)
 		{
-			//a.setActionColor();
-			
-			if(a.actionType != ActionType.MOVECHECK)
-			{
-				//acting out of turn
-				if(a.getActionColor() != currentTurnColor)
-				{
-					System.out.println("Invalid move; it is " + currentTurnColor + "'s turn");
-				}
-				else if(a.actionType == ActionType.MOVEMENT)
-				{
-					//MoveAction ma = (MoveAction)a;
-					if(a.execute())
-					{
-						displayBoard();
-						currentTurnColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-						notifyTurn();
-					}
-				}
-			}
-			else
-			{
-				a.execute();
-			}
-			
+			processAction(a);
 		}
 	}
 	
 	public void notifyTurn()
 	{
 		System.out.println("It is now " + currentTurnColor + "'s turn.");
+		
+		
+		System.out.println("Movable pieces are on:" + teams.get(currentTurnColor).getMovablePieces(board));
+		
 		if(isKingInCheck())
 		{
 			//every time there is a check, check for checkmate
 			if(isKingInCheckmate())
 			{
 				System.out.println(currentTurnColor + "'s King has been checkmated; game over.");
+				isRunning = false;
 			}
 			else
 			{

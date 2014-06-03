@@ -1,4 +1,4 @@
-f8 h6
-a8 e8
-h1 h2
-e5 e4
+f2 f3
+e7 e5
+g2 g4
+d8 h4

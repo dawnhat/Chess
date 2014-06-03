@@ -25,6 +25,20 @@ public class Team
 		this.teamPositions.put(piece, square);
 	}
 	
+	public Set<Square> getMovablePieces(Board board)
+	{
+		HashSet<Square> moves = new HashSet<Square>();
+		for(Piece p : teamPositions.keySet())
+		{
+			if(!p.getPossibleMoves(teamPositions.get(p), board).isEmpty())
+			{
+				moves.add(teamPositions.get(p));
+			}
+		}
+		
+		return moves;
+	}
+	
 	public Set<Piece> getPieces()
 	{
 		/*

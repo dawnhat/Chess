@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Scanner;
+
 import model.Piece.TeamColor;
 
 public class MoveAction extends Action
@@ -8,6 +10,7 @@ public class MoveAction extends Action
 	private Square square2;
 	private Piece piece;
 	private Game game;
+	private Scanner scan;	
 	
 	public MoveAction(Square s1, Square s2, Game game)
 	{
@@ -98,14 +101,23 @@ public class MoveAction extends Action
 				
 				//clear
 				
+				game.getTeams().get(movedPiece.getColor()).updatePiecePosition(movedPiece, square2);
+				
 				if(movedPiece.name.equals("Pawn"))
 				{
 					Pawn p = (Pawn)movedPiece;
 					p.hasMoved = true;
+					
+					//if pawn moves onto these magic squares
+					if(game.getBoard().returnPromoteSquares().contains(square2))
+					{
+						promotePawn(p);
+					}
+					
 				}
 				
 				//finally, update the piece's final position with its team
-				game.getTeams().get(movedPiece.getColor()).updatePiecePosition(movedPiece, square2);
+				
 				
 				executed = true;
 				
@@ -125,6 +137,42 @@ public class MoveAction extends Action
 		
 		return executed;
 		
+	}
+	
+	public void promotePawn(Pawn pawn)
+	{
+		scan = new Scanner(System.in);
+		TeamColor color = pawn.getColor();
+		Square position = game.getTeams().get(color).getPiecePosition(pawn);
+		//replace it with a piece of the same color
+		
+		Piece newPiece = null;
+		
+		boolean piecePromoted = false;
+		
+		while(!piecePromoted)
+		{
+			System.out.println("Promote pawn to: ");
+			System.out.println("Q - Queen \nN - Knight\nB - Bishop \nR - Rook");
+			
+			String input = scan.nextLine().toUpperCase();
+			if(input.equals("Q") || input.equals("B") || input.equals("N") || input.equals("R"))
+			{
+				newPiece = Placer.returnPiece(input, color);
+				piecePromoted = true;
+			}
+			else
+			{
+				System.out.println("Not a valid piece to promote to!");
+			}
+		}
+		
+		position.setPiece(newPiece);
+		game.getTeams().get(color).addPiece(newPiece, position);
+		//remove pawn
+		game.getTeams().get(color).deletePiece(pawn);
+		
+		game.getTeams().get(color).updatePiecePosition(newPiece, position);
 	}
 
 
