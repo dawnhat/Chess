@@ -1,7 +1,10 @@
 package model;
 
+import java.awt.Image;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.swing.ImageIcon;
 
 import model.Piece.TeamColor;
 
@@ -14,6 +17,10 @@ public class Rook extends Piece
 		this.teamColor = color;
 		displaySymbol = this.teamColor.equals(TeamColor.WHITE) ? "r" : "R";
 		possibleMoves = new HashSet<Square>();
+		ImageIcon ic = new ImageIcon("src/images/" + teamColor.toString().toLowerCase() + "rook.png");
+		Image i = ic.getImage();
+		Image newImage = i.getScaledInstance(75, 75, java.awt.Image.SCALE_SMOOTH);
+		this.image = new ImageIcon(newImage);
 	}
 
 	@Override

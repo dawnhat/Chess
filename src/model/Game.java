@@ -20,11 +20,11 @@ public class Game
 	private HashMap<TeamColor, Team> teams;
 	private boolean isRunning;
 	private Scanner scan;	
-	
+
 	public Game(Board board)
 	{
 		this.board = board;
-		this.v = new Viewer();
+		this.v = new Viewer(this);
 		this.currentTurnColor = TeamColor.WHITE;
 		
 		teams = new HashMap<TeamColor, Team>();
@@ -52,7 +52,10 @@ public class Game
 			TeamColor color = pa.getPiece().getColor();
 			teams.get(color).addPiece(pa.getPiece(), pa.getSquare());
 			//System.out.println(pa.getPiece().getColor());
+			
+			
 		}
+		v.setupGui(this.board);
 	}
 	
 	public Board getBoard()
@@ -121,7 +124,7 @@ public class Game
 					if(!isKingInCheck())
 					{
 						//System.out.println(p.getName() + ", " + s);
-						return false;
+						checkMated = false;
 					}					
 					//else, undo the changes and continue checking moves
 					
@@ -184,14 +187,27 @@ public class Game
 			}
 			else if(a.actionType == ActionType.MOVEMENT)
 			{
-				//MoveAction ma = (MoveAction)a;
-				if(a.execute())
+				boolean inCheck = isKingInCheck();
+				MoveAction ma = (MoveAction)a;
+				
+				//if the king was in check to begin with
+				if(ma.execute())
 				{
-					displayBoard();
-					
-					currentTurnColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
-					notifyTurn();
+					if(isKingInCheck())
+					{
+						//undo move
+						System.out.println("Invalid move; " + currentTurnColor + "'s king must be taken out of check.");
+						ma.undo();
+					}
+					else
+					{
+						currentTurnColor = (currentTurnColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+						notifyTurn();
+					}
+
 				}
+				
+				displayBoard();
 			}
 		}
 		else
@@ -224,10 +240,14 @@ public class Game
 			{
 				System.out.println(currentTurnColor + "'s King has been checkmated; game over.");
 				isRunning = false;
+				//v.closeGui();
+			
 			}
 			else
 			{
 				System.out.println(currentTurnColor + "'s King is in check.");
+				//i need to make sure king gets out of check on this turn
+				
 			}
 		}
 	}

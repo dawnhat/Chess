@@ -11,6 +11,7 @@ public class MoveAction extends Action
 	private Piece piece;
 	private Game game;
 	private Scanner scan;	
+	private Piece capturedPiece;
 	
 	public MoveAction(Square s1, Square s2, Game game)
 	{
@@ -19,6 +20,7 @@ public class MoveAction extends Action
 		this.piece = s1.getPiece();
 		this.actionType = ActionType.MOVEMENT;
 		this.game = game;
+		capturedPiece = s2.getPiece(); //could be null
 	}
 	
 	
@@ -64,6 +66,26 @@ public class MoveAction extends Action
 		return this.actionColor;
 	}
 	
+	public void undo()
+	{
+		//we will only call this if executed was true - ie. if the move was valid, so we don't need to check for stuff
+		//like whether it was a valid move
+		
+		//because it's now on square2
+		Piece movedPiece = square2.getPiece();
+		square1.setPiece(movedPiece);
+		game.getTeams().get(movedPiece.getColor()).updatePiecePosition(movedPiece, square1);
+		
+		if(capturedPiece != null)
+		{
+			square2.setPiece(capturedPiece);
+			game.getTeams().get(capturedPiece.getColor()).addPiece(capturedPiece, square2);
+		}
+		else
+		{
+			square2.clearPiece();
+		}
+	}
 	
 	@Override
 	public boolean execute() 
@@ -99,6 +121,8 @@ public class MoveAction extends Action
 				//game.getTeams().get(movedPiece.getColor()).updatePiecePosition(movedPiece, square2);
 				square1.clearPiece();
 				
+				
+				
 				//clear
 				
 				game.getTeams().get(movedPiece.getColor()).updatePiecePosition(movedPiece, square2);
@@ -118,7 +142,9 @@ public class MoveAction extends Action
 				
 				//finally, update the piece's final position with its team
 				
-				
+				//change the square's image?
+				//square2.setImage(movedPiece.getImage());
+				square2.repaint();
 				executed = true;
 				
 			}
